@@ -23,7 +23,7 @@
 ```go
 import (
 		"fmt"
-  	 "os"
+  	"os"
 )
 ```
 
@@ -33,4 +33,11 @@ import (
 import "github.com/CarberryChai/learn-go/utils" // 导入本地utils包
 ```
 
-在包内，如果一个标识符以大写字母开头，则表示该标识符所指的对象（引用了c++中对象的概念，泛指一切的实体，不包括引用）是可导出的，即public，类似javascript中`export`，泛指小写字母开头表示private，不可导出。
+在包内，如果一个标识符以大写字母开头，则表示该标识符所指的对象（引用了c++中对象的概念，泛指一切的实体，不包括引用）是可导出的，即`public`，类似`javascript`中`export`，反之小写字母开头表示private，不可导出。
+
+如果想在包初始化的时候进行一些比较负责的初始化工作，可以定义一个`init`函数
+
+```go
+func init() { /* ... */ }
+```
+
