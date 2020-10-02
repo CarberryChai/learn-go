@@ -1,8 +1,10 @@
 package utils
 
 import (
+	"bufio"
 	"bytes"
 	"fmt"
+	"os"
 	"time"
 )
 
@@ -59,5 +61,18 @@ func CountDown(delay int) {
 	for i := delay; i >= 0; i-- {
 		fmt.Println(i)
 		<-tick
+	}
+}
+
+// ReadFile 读文件
+func ReadFile(filename string) {
+	file, err := os.Open(filename)
+	if err != nil {
+		fmt.Errorf(err.Error())
+	}
+	defer file.Close()
+	scanner := bufio.NewScanner(file)
+	for scanner.Scan() {
+		fmt.Println(scanner.Text())
 	}
 }

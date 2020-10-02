@@ -1,15 +1,12 @@
 package main
 
-import "fmt"
-
-// import "github.com/gin-gonic/gin"
+import (
+	"github.com/CarberryChai/learn-go/router"
+	"github.com/gin-gonic/gin"
+)
 
 func main() {
-	fmt.Println("hello, 世界！")
-	z := add(1, 2)
-	fmt.Println(z)
-}
-
-func add(x, y int) int {
-	return x + y
+	app := gin.Default()
+	router.Init(app)
+	app.Run(":3000")
 }
