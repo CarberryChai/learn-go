@@ -3,10 +3,11 @@ package controller
 import (
 	"mime/multipart"
 	"net/http"
-	"path/filepath"
+	"path"
 
 	"github.com/CarberryChai/learn-go/response"
 	"github.com/gin-gonic/gin"
+	"github.com/google/uuid"
 )
 
 type BindFile struct {
@@ -21,7 +22,7 @@ func Upload(ctx *gin.Context) {
 		return
 	}
 	file := uploadFile.File
-	dst := filepath.Base(file.Filename)
+	dst := "static/images/" + uuid.New().String() + path.Ext(file.Filename)
 	if err := ctx.SaveUploadedFile(file, dst); err != nil {
 		ctx.String(http.StatusBadRequest, "upload file error: %s", err.Error())
 		return
