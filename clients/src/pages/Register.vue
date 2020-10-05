@@ -1,10 +1,10 @@
 <template>
-  <router-view />
+  <div>Register</div>
 </template>
 
 <script>
 import { defineComponent } from 'vue'
 export default defineComponent({
-  name: 'App',
+  name: 'Register',
 })
 </script>
