@@ -4,35 +4,81 @@
     <form class="form" @submit.prevent="submit">
       <div class="item">
         <label for="email">邮箱：</label>
-        <input id="email" type="text" name="email" />
+        <input
+          id="email"
+          type="email"
+          name="email"
+          title="请填写有效的邮箱"
+          pattern="^([^\x00-\x20\x22\x28\x29\x2c\x2e\x3a-\x3c\x3e\x40\x5b-\x5d\x7f-\xff]+|\x22([^\x0d\x22\x5c\x80-\xff]|\x5c[\x00-\x7f])*\x22)(\x2e([^\x00-\x20\x22\x28\x29\x2c\x2e\x3a-\x3c\x3e\x40\x5b-\x5d\x7f-\xff]+|\x22([^\x0d\x22\x5c\x80-\xff]|\x5c[\x00-\x7f])*\x22))*\x40([^\x00-\x20\x22\x28\x29\x2c\x2e\x3a-\x3c\x3e\x40\x5b-\x5d\x7f-\xff]+|\x5b([^\x0d\x5b-\x5d\x80-\xff]|\x5c[\x00-\x7f])*\x5d)(\x2e([^\x00-\x20\x22\x28\x29\x2c\x2e\x3a-\x3c\x3e\x40\x5b-\x5d\x7f-\xff]+|\x5b([^\x0d\x5b-\x5d\x80-\xff]|\x5c[\x00-\x7f])*\x5d))*$"
+          required
+        />
       </div>
       <div class="item">
         <label for="password">密码：</label>
-        <input id="password" type="password" name="password" />
+        <input id="password" type="password" name="password" required />
       </div>
       <div class="item">
         <label for="confirmPassword">确认密码：</label>
-        <input id="confirmPassword" type="password" name="confirmPassword" />
+        <input
+          id="confirmPassword"
+          type="password"
+          name="confirmPassword"
+          required
+        />
       </div>
-      <Button html-type="submit">提交</Button>
+      <div class="form-sb">
+        <Button html-type="submit" class-name="sb-btn" :loading="loading"
+          >提交</Button
+        >
+      </div>
     </form>
   </div>
 </template>
 
 <script>
-import { defineComponent } from 'vue'
+import { defineComponent, getCurrentInstance, ref } from 'vue'
 import Button from '/@/components/Button.vue'
+import { validate } from '/@/common/util'
+
 export default defineComponent({
   name: 'Register',
   components: {
     Button,
   },
   setup(props, ctx) {
+    const loading = ref(false)
+    const notify = getCurrentInstance().appContext.config.globalProperties
+      .$notify
     const submit = e => {
-      console.log(e)
+      const eles = e.target.elements
+      const data = ['email', 'password', 'confirmPassword'].reduce(
+        (t, c) => ((t[c] = eles[c].value), t),
+        {}
+      )
+      if (!formValidate(data)) return
+      loading.value = true
+      console.log(data)
+    }
+    const formValidate = data => {
+      for (const key of Object.keys(data)) {
+        if (!validate(data[key], 'require')) {
+          notify('请检查表单是否填写完整~')
+          return false
+        }
+      }
+      if (!validate(data['email'], 'email')) {
+        notify('邮箱格式错误~')
+        return false
+      }
+      if (data['confirmPassword'] !== data['password']) {
+        notify('确认密码与原密码不同~')
+        return false
+      }
+      return true
     }
     return {
       submit,
+      loading,
     }
   },
 })
@@ -77,11 +123,11 @@ export default defineComponent({
         border: 1px solid #d9d9d9;
         display: inline-block;
         flex: 0.8;
-        padding: 0.3em 1em;
+        padding: 0.4em 1em;
         border-radius: 5px;
         transition: all 0.3s;
         &:hover {
-          border-color: #40a9ff;
+          border-color: var(--btn-primary);
         }
         &:focus {
           border-color: #40a9ff;
@@ -90,6 +136,16 @@ export default defineComponent({
         &:placeholder-shown {
           text-overflow: ellipsis;
         }
+      }
+    }
+    .form-sb {
+      margin-top: 30px;
+      text-align: center;
+      .sb-btn {
+        padding-left: 8em;
+        padding-right: 8em;
+        background-color: var(--btn-primary);
+        color: white;
       }
     }
   }

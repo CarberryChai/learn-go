@@ -6,6 +6,8 @@ import (
 	"fmt"
 	"os"
 	"time"
+
+	"golang.org/x/crypto/bcrypt"
 )
 
 // HasPrefix 判断字符串s是否有prefix前缀
@@ -75,4 +77,16 @@ func ReadFile(filename string) {
 	for scanner.Scan() {
 		fmt.Println(scanner.Text())
 	}
+}
+
+// HashPassword 把明文密码转化成hash值
+func HashPassword(password string) (string, error) {
+	bytes, err := bcrypt.GenerateFromPassword([]byte(password), 14)
+	return string(bytes), err
+}
+
+// CheckPasswordHash 检查密码hash值
+func CheckPasswordHash(password, hash string) bool {
+	err := bcrypt.CompareHashAndPassword([]byte(hash), []byte(password))
+	return err == nil
 }

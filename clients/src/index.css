@@ -9,6 +9,7 @@ ul {
 :root {
   font-size: 16px;
   color: #666;
+  --btn-primary: #40a9ff;
 }
 a {
   text-decoration: none;

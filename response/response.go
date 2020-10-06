@@ -18,3 +18,6 @@ type Result struct {
 func Success(data interface{}, msg string) *Result {
 	return &Result{Code: SUCCESS, Data: data, Msg: msg}
 }
+func Fail(data interface{}, msg string) *Result {
+	return &Result{Code: FAIL, Data: data, Msg: msg}
+}

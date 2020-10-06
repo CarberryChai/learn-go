@@ -8,5 +8,7 @@ import (
 // Init 路由注册
 func Init(r *gin.Engine) {
 	//	r.Static("/", "public")
-	r.POST("/upload", controller.Upload)
+	router := r.Group("/api")
+	router.POST("/upload", controller.Upload)
+	router.POST("/register", controller.Register)
 }

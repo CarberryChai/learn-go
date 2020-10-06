@@ -53,6 +53,10 @@ export default defineComponent({
   background-color: #fff;
   border-radius: 0.3em;
   cursor: pointer;
+  transition: opacity 0.3s;
+  &:hover {
+    opacity: 0.7;
+  }
 }
 .loading-container {
   display: flex;
@@ -71,6 +75,7 @@ export default defineComponent({
 }
 .btn-disabled {
   cursor: not-allowed;
+  opacity: 0.7;
 }
 @keyframes load {
   0% {
