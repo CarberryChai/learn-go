@@ -1,3 +1,28 @@
+import axios from 'axios'
+import notify from '/@/components/Notify'
+axios.interceptors.response.use(
+  function (response) {
+    const { data } = response
+    if (data.code < 0) {
+      notify(data.msg)
+    }
+    return data
+  },
+  function (error) {
+    // Any status codes that falls outside the range of 2xx cause this function to trigger
+    // Do something with response error
+    return Promise.reject(error)
+  }
+)
+
+export function get(url, data) {
+  return axios.get(url, {
+    params: data,
+  })
+}
+export function post(url, data) {
+  return axios.post(url, data)
+}
 /**
  *表单验证
  *

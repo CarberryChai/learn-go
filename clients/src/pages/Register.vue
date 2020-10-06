@@ -3,6 +3,10 @@
     <div class="title">注册</div>
     <form class="form" @submit.prevent="submit">
       <div class="item">
+        <label for="name">昵称：</label>
+        <input id="name" type="text" name="name" title="请填写昵称" required />
+      </div>
+      <div class="item">
         <label for="email">邮箱：</label>
         <input
           id="email"
@@ -36,7 +40,7 @@
 </template>
 
 <script>
-import { defineComponent, getCurrentInstance, ref } from 'vue'
+import { defineComponent } from 'vue'
 import Button from '/@/components/Button.vue'
 import { validate } from '/@/common/util'
 
@@ -45,41 +49,43 @@ export default defineComponent({
   components: {
     Button,
   },
-  setup(props, ctx) {
-    const loading = ref(false)
-    const notify = getCurrentInstance().appContext.config.globalProperties
-      .$notify
-    const submit = e => {
+  data() {
+    return {
+      loading: false,
+    }
+  },
+  methods: {
+    submit(e) {
       const eles = e.target.elements
-      const data = ['email', 'password', 'confirmPassword'].reduce(
+      const data = ['name', 'email', 'password', 'confirmPassword'].reduce(
         (t, c) => ((t[c] = eles[c].value), t),
         {}
       )
-      if (!formValidate(data)) return
-      loading.value = true
-      console.log(data)
-    }
-    const formValidate = data => {
+      if (!this._formValidate(data)) return
+      this.loading = true
+      this.$post('/api/register', data)
+        .then(console.log)
+        .finally(() => {
+          this.loading = false
+        })
+    },
+    _formValidate(data) {
       for (const key of Object.keys(data)) {
         if (!validate(data[key], 'require')) {
-          notify('请检查表单是否填写完整~')
+          this.$notify('请检查表单是否填写完整~')
           return false
         }
       }
       if (!validate(data['email'], 'email')) {
-        notify('邮箱格式错误~')
+        this.$notify('邮箱格式错误~')
         return false
       }
       if (data['confirmPassword'] !== data['password']) {
-        notify('确认密码与原密码不同~')
+        this.$notify('确认密码与原密码不同~')
         return false
       }
       return true
-    }
-    return {
-      submit,
-      loading,
-    }
+    },
   },
 })
 </script>
@@ -114,6 +120,14 @@ export default defineComponent({
         margin-right: 20px;
         flex: 0.2;
         text-align: center;
+        position: relative;
+        &::before {
+          content: '*';
+          position: absolute;
+          left: 100%;
+          top: 0;
+          color: red;
+        }
       }
       input {
         border: none;

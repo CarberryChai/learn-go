@@ -4,19 +4,20 @@ import (
 	"net/http"
 
 	"github.com/CarberryChai/learn-go/response"
+	"github.com/CarberryChai/learn-go/service"
 	"github.com/gin-gonic/gin"
 )
 
-type registBind struct {
-	Email           string `form:"email" binding:"required,email"`
-	Password        string `form:"password" binding:"required,gte=8"`
-	ConfirmPassword string `form:"confirmPassword" binding:"requred,gte=8,eqfield=Password"`
-}
-
+// Register 注册
 func Register(ctx *gin.Context) {
-	var userInput registBind
-	if err := ctx.ShouldBind(&userInput); err != nil {
+	var userInput service.RegistBind
+	if err := ctx.ShouldBindJSON(&userInput); err != nil {
 		ctx.JSON(http.StatusOK, response.Fail(nil, err.Error()))
 		return
 	}
+	if res := (&userInput).Register(); res != nil {
+		ctx.JSON(http.StatusOK, res)
+		return
+	}
+	ctx.JSON(http.StatusOK, response.Success(nil, "创建成功"))
 }

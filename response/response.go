@@ -18,6 +18,13 @@ type Result struct {
 func Success(data interface{}, msg string) *Result {
 	return &Result{Code: SUCCESS, Data: data, Msg: msg}
 }
+
+//Fail 失败的结果
 func Fail(data interface{}, msg string) *Result {
 	return &Result{Code: FAIL, Data: data, Msg: msg}
+}
+
+// New 创建一个新的普通的结果
+func New(code int, data interface{}, msg string) *Result {
+	return &Result{Code: code, Data: data, Msg: msg}
 }
