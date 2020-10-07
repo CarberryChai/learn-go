@@ -2,7 +2,7 @@ import { createApp } from 'vue'
 import App from './App.vue'
 import { get, post } from './common/util'
 import notify from './components/Notify'
-import './index.css'
+import './index.scss'
 import router from './router'
 
 const app = createApp(App)

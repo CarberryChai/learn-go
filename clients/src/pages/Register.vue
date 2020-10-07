@@ -64,7 +64,14 @@ export default defineComponent({
       if (!this._formValidate(data)) return
       this.loading = true
       this.$post('/api/register', data)
-        .then(console.log)
+        .then(res => {
+          if (res.code === 0) {
+            this.$notify(res.msg)
+            setTimeout(() => {
+              this.$router.push('/login')
+            }, 2000)
+          }
+        })
         .finally(() => {
           this.loading = false
         })
@@ -90,7 +97,7 @@ export default defineComponent({
 })
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .register-container {
   margin: 50px auto 0;
   max-width: 600px;
@@ -107,60 +114,6 @@ export default defineComponent({
       background-color: #ccc;
       margin: 0 10px;
       vertical-align: middle;
-    }
-  }
-  .form {
-    margin-top: 100px;
-    .item {
-      margin-top: 20px;
-      display: flex;
-      align-items: center;
-      label {
-        display: block;
-        margin-right: 20px;
-        flex: 0.2;
-        text-align: center;
-        position: relative;
-        &::before {
-          content: '*';
-          position: absolute;
-          left: 100%;
-          top: 0;
-          color: red;
-        }
-      }
-      input {
-        border: none;
-        outline: none;
-        font-size: 14px;
-        line-height: 1.5;
-        border: 1px solid #d9d9d9;
-        display: inline-block;
-        flex: 0.8;
-        padding: 0.4em 1em;
-        border-radius: 5px;
-        transition: all 0.3s;
-        &:hover {
-          border-color: var(--btn-primary);
-        }
-        &:focus {
-          border-color: #40a9ff;
-          box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2);
-        }
-        &:placeholder-shown {
-          text-overflow: ellipsis;
-        }
-      }
-    }
-    .form-sb {
-      margin-top: 30px;
-      text-align: center;
-      .sb-btn {
-        padding-left: 8em;
-        padding-right: 8em;
-        background-color: var(--btn-primary);
-        color: white;
-      }
     }
   }
 }

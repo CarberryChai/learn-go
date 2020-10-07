@@ -3,7 +3,7 @@ import notify from '/@/components/Notify'
 axios.interceptors.response.use(
   function (response) {
     const { data } = response
-    if (data.code < 0) {
+    if (data?.code < 0) {
       notify(data.msg)
     }
     return data
